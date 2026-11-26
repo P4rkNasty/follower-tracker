@@ -2,614 +2,220 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#0b0b0f">
 <title>Follower Tracker</title>
-
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <style>
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  background: #0b0b0f;
-  color: #fff;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
-               "Segoe UI", sans-serif;
-}
-
-header {
-  padding: 45px 20px 20px;
-}
-
-.small-title {
-  color: #8c8c96;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 2px;
-}
-
-h1 {
-  margin: 5px 0 0;
-  font-size: 32px;
-}
-
-main {
-  padding: 0 18px 40px;
-}
-
-.hero {
-  background: #15151b;
-  border: 1px solid #292930;
-  border-radius: 22px;
-  padding: 18px;
-  margin-bottom: 15px;
-}
-
-.hero p {
-  color: #9999a3;
-  font-size: 14px;
-}
-
-button {
-  border: 0;
-  border-radius: 13px;
-  padding: 12px 15px;
-  font-weight: 700;
-}
-
-.primary {
-  background: #fff;
-  color: #111;
-}
-
-.stats {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-bottom: 15px;
-}
-
-.stat {
-  background: #15151b;
-  border: 1px solid #292930;
-  border-radius: 18px;
-  padding: 15px;
-}
-
-.stat span {
-  display: block;
-  color: #92929c;
-  font-size: 12px;
-  margin-bottom: 7px;
-}
-
-.stat b {
-  font-size: 25px;
-}
-
-.red {
-  color: #ff5c72;
-}
-
-.card {
-  background: #111116;
-  border: 1px solid #292930;
-  border-radius: 22px;
-  overflow: hidden;
-  margin-bottom: 15px;
-}
-
-.tabs {
-  display: flex;
-  background: #17171d;
-  padding: 5px;
-  gap: 4px;
-}
-
-.tab {
-  flex: 1;
-  background: transparent;
-  color: #888892;
-}
-
-.tab.active {
-  background: #292930;
-  color: white;
-}
-
-.toolbar {
-  display: flex;
-  gap: 8px;
-  padding: 13px;
-}
-
-input {
-  flex: 1;
-  min-width: 0;
-  background: #19191f;
-  border: 1px solid #303038;
-  border-radius: 13px;
-  padding: 12px;
-  color: white;
-  font-size: 14px;
-  outline: none;
-}
-
-.list {
-  padding: 0 10px 10px;
-}
-
-.row {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  padding: 13px 7px;
-  border-top: 1px solid #24242b;
-}
-
-.avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: linear-gradient(135deg,#3b3b45,#1d1d24);
-  display: grid;
-  place-items: center;
-  font-weight: 800;
-}
-
-.name {
-  flex: 1;
-  min-width: 0;
-}
-
-.name b {
-  display: block;
-  font-size: 14px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.name span {
-  display: block;
-  color: #777780;
-  font-size: 11px;
-  margin-top: 3px;
-}
-
-.action {
-  background: #19191f;
-  border: 1px solid #34343d;
-  color: white;
-  font-size: 12px;
-}
-
-.empty {
-  text-align: center;
-  padding: 30px 15px;
-  color: #777780;
-}
-
-.help {
-  padding: 18px;
-}
-
-.help h2 {
-  font-size: 17px;
-}
-
-.help p {
-  color: #9999a3;
-  font-size: 13px;
-  line-height: 1.6;
-}
-
-@media (min-width: 700px) {
-  main, header {
-    max-width: 700px;
-    margin: auto;
-  }
-
-  .stats {
-    grid-template-columns: repeat(4,1fr);
-  }
-}
+*{box-sizing:border-box}
+:root{color-scheme:dark}
+body{margin:0;background:#0b0b0f;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input{font:inherit}
+header{padding:34px 20px 20px;text-align:center}
+h1{margin:0;font-size:30px}
+.subtitle{color:#9b9ba5;margin:7px 0 0}
+main{max-width:850px;margin:auto;padding:0 16px 50px}
+.card{background:#15151c;border:1px solid #292933;border-radius:20px;padding:18px;margin:14px 0;box-shadow:0 8px 30px #0004}
+.upload{border:2px dashed #3b3b47;text-align:center;padding:28px 18px}
+.upload strong{display:block;font-size:18px;margin-bottom:8px}
+.upload p{color:#a7a7b0;margin:0 0 16px;line-height:1.45}
+input[type=file]{display:none}
+.btn{display:inline-block;border:0;border-radius:12px;padding:12px 18px;background:#fff;color:#111;font-weight:700;cursor:pointer}
+.btn.secondary{background:#272730;color:#fff}
+.status{margin-top:14px;color:#a7a7b0;font-size:14px;word-break:break-word}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat{background:#1d1d25;border-radius:15px;padding:15px;text-align:center}
+.stat .num{font-size:28px;font-weight:800}
+.stat .label{color:#a7a7b0;font-size:13px;margin-top:4px}
+.tabs{display:flex;gap:8px;overflow:auto;margin:14px 0}
+.tab{white-space:nowrap;background:#1d1d25;color:#aaa;border:1px solid #30303a;border-radius:999px;padding:10px 14px}
+.tab.active{background:#fff;color:#111}
+.search{width:100%;background:#17171e;border:1px solid #33333d;color:#fff;border-radius:12px;padding:13px;margin-bottom:12px;outline:none}
+.list{max-height:55vh;overflow:auto}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 4px;border-bottom:1px solid #282830}
+.row:last-child{border-bottom:0}
+.user{font-weight:650;overflow:hidden;text-overflow:ellipsis}
+.small{color:#90909a;font-size:12px;margin-top:3px}
+.row button{flex:none;border:1px solid #3b3b45;background:#22222a;color:#fff;border-radius:9px;padding:8px 10px}
+.empty{text-align:center;color:#999;padding:24px}
+.note{color:#8e8e98;font-size:13px;line-height:1.5}
+@media(max-width:520px){.stats{grid-template-columns:repeat(3,1fr)}.stat .num{font-size:23px}}
 </style>
 </head>
-
 <body>
-
 <header>
-  <div class="small-title">FOLLOWER TRACKER</div>
-  <h1>My Followers</h1>
+<h1>Follower Tracker</h1>
+<div class="subtitle">Instagram follower & following analyzer</div>
 </header>
 
 <main>
-
-<section class="hero">
-  <p>Private follower tracking on your device.</p>
-
-  <input
-    type="file"
-    id="fileInput"
-    accept=".json,.txt,.html,.htm"
-    multiple
-  >
-
-  <br><br>
-
-  <button class="primary" onclick="importData()">
-    Import follower data
-  </button>
+<section class="card upload">
+<strong>Import your Instagram data</strong>
+<p>Select the ZIP you downloaded from Instagram. Everything is processed in your browser.</p>
+<label class="btn" for="zipInput">Choose Instagram ZIP</label>
+<input id="zipInput" type="file" accept=".zip,application/zip">
+<div id="status" class="status">No export loaded.</div>
 </section>
 
-<section class="stats">
-
-<div class="stat">
-<span>Followers</span>
-<b id="followers">0</b>
+<section id="dashboard" class="card" hidden>
+<div class="stats">
+<div class="stat"><div id="followersCount" class="num">0</div><div class="label">Followers</div></div>
+<div class="stat"><div id="followingCount" class="num">0</div><div class="label">Following</div></div>
+<div class="stat"><div id="notFollowingBackCount" class="num">0</div><div class="label">Don't follow back</div></div>
 </div>
+</section>
 
-<div class="stat">
-<span>Following</span>
-<b id="following">0</b>
+<section id="results" class="card" hidden>
+<div class="tabs">
+<button class="tab active" data-tab="notBack">Don't follow back</button>
+<button class="tab" data-tab="fans">Don't follow</button>
+<button class="tab" data-tab="followers">Followers</button>
+<button class="tab" data-tab="following">Following</button>
 </div>
-
-<div class="stat">
-<span>Don't follow back</span>
-<b id="notBack" class="red">0</b>
-</div>
-
-<div class="stat">
-<span>You don't follow</span>
-<b id="notFollowing">0</b>
-</div>
-
+<input id="search" class="search" placeholder="Search username...">
+<div id="list" class="list"></div>
 </section>
 
 <section class="card">
-
-<div class="tabs">
-
-<button class="tab active" onclick="showTab('notback',this)">
-Don't follow back
-</button>
-
-<button class="tab" onclick="showTab('followers',this)">
-Followers
-</button>
-
-<button class="tab" onclick="showTab('following',this)">
-Following
-</button>
-
-</div>
-
-<div class="toolbar">
-
-<input
-id="search"
-type="search"
-placeholder="Search username..."
-oninput="render()"
->
-
-</div>
-
-<div id="list" class="list"></div>
-
+<div class="note"><b>Privacy:</b> the ZIP is read locally in this browser. This page does not send your Instagram export to a server.</div>
 </section>
-
-<section class="card help">
-
-<h2>How it works</h2>
-
-<p>
-Import your follower and following data from your social account.
-The tracker compares the two lists and shows you who doesn't
-follow you back.
-</p>
-
-<p>
-Your data is stored locally in this browser. No password is needed.
-</p>
-
-</section>
-
 </main>
 
 <script>
+const state={followers:new Set(),following:new Set(),tab:"notBack"};
+const $=id=>document.getElementById(id);
 
-let followers =
-JSON.parse(localStorage.getItem("followers") || "[]");
-
-let following =
-JSON.parse(localStorage.getItem("following") || "[]");
-
-let unfollowed =
-JSON.parse(localStorage.getItem("unfollowed") || "[]");
-
-let currentTab = "notback";
-
-function save() {
-
-localStorage.setItem(
-"followers",
-JSON.stringify(followers)
-);
-
-localStorage.setItem(
-"following",
-JSON.stringify(following)
-);
-
-localStorage.setItem(
-"unfollowed",
-JSON.stringify(unfollowed)
-);
-
+function cleanUsername(value){
+  if(!value) return "";
+  if(typeof value==="string"){
+    value=value.trim();
+    if(value.startsWith("@")) value=value.slice(1);
+    return value;
+  }
+  return "";
 }
 
-function normalize(name) {
-
-return String(name)
-.trim()
-.replace(/^@/,"")
-.toLowerCase();
-
+function extractFromJson(data){
+  const out=[];
+  const walk=(x)=>{
+    if(Array.isArray(x)){for(const v of x) walk(v);return;}
+    if(!x||typeof x!=="object") return;
+    if(typeof x.string_list_data==="object" && Array.isArray(x.string_list_data)){
+      for(const item of x.string_list_data){
+        if(item && typeof item.value==="string") out.push(cleanUsername(item.value));
+      }
+    }
+    if(typeof x.title==="string" && !x.string_list_data) out.push(cleanUsername(x.title));
+    if(typeof x.username==="string") out.push(cleanUsername(x.username));
+    for(const [k,v] of Object.entries(x)){
+      if(k!=="string_list_data") walk(v);
+    }
+  };
+  walk(data);
+  return [...new Set(out.filter(Boolean))];
 }
 
-function extractUsers(text) {
+async function parseZip(file){
+  if(typeof JSZip==="undefined") throw new Error("ZIP reader failed to load. Refresh the page and try again.");
+  const zip=await JSZip.loadAsync(file);
+  let followerFiles=[],followingFiles=[];
+  for(const name of Object.keys(zip.files)){
+    const lower=name.toLowerCase();
+    if(!lower.endsWith(".json") || zip.files[name].dir) continue;
+    if(lower.includes("followers_and_following") || lower.includes("followers") || lower.includes("following")){
+      if(/(^|\/)followers(_\d+)?\.json$/.test(lower) || lower.endsWith("/followers.json")) followerFiles.push(name);
+      if(/(^|\/)following(_\d+)?\.json$/.test(lower) || lower.endsWith("/following.json")) followingFiles.push(name);
+    }
+  }
+  // Fallback: search filenames anywhere in the export.
+  if(!followerFiles.length){
+    followerFiles=Object.keys(zip.files).filter(n=>/followers(_\d+)?\.json$/i.test(n));
+  }
+  if(!followingFiles.length){
+    followingFiles=Object.keys(zip.files).filter(n=>/following(_\d+)?\.json$/i.test(n));
+  }
 
-let users = [];
+  const readMany=async names=>{
+    const all=[];
+    for(const n of names){
+      try{
+        const text=await zip.files[n].async("text");
+        const data=JSON.parse(text);
+        all.push(...extractFromJson(data));
+      }catch(e){}
+    }
+    return [...new Set(all.filter(Boolean))];
+  };
 
-try {
-
-let data = JSON.parse(text);
-
-function scan(obj) {
-
-if (!obj) return;
-
-if (typeof obj === "string") {
-
-if (
-obj.length >= 2 &&
-obj.length <= 40 &&
-/^[a-zA-Z0-9._]+$/.test(obj)
-) {
-users.push(normalize(obj));
+  const followers=await readMany(followerFiles);
+  const following=await readMany(followingFiles);
+  return {followers,following,followerFiles,followingFiles};
 }
 
-return;
-
+function render(){
+  const search=$("search").value.trim().toLowerCase();
+  let items=[];
+  if(state.tab==="notBack"){
+    items=[...state.following].filter(x=>!state.followers.has(x));
+  }else if(state.tab==="fans"){
+    items=[...state.followers].filter(x=>!state.following.has(x));
+  }else if(state.tab==="followers"){
+    items=[...state.followers];
+  }else{
+    items=[...state.following];
+  }
+  items.sort((a,b)=>a.localeCompare(b));
+  if(search) items=items.filter(x=>x.toLowerCase().includes(search));
+  const list=$("list");
+  if(!items.length){
+    list.innerHTML='<div class="empty">No accounts found.</div>';
+    return;
+  }
+  list.innerHTML=items.map(u=>{
+    let action="";
+    if(state.tab==="notBack") action='<button onclick="copyUser(this)" data-user="'+escapeAttr(u)+'">Copy</button>';
+    return '<div class="row"><div><div class="user">@'+escapeHtml(u)+'</div></div>'+action+'</div>';
+  }).join("");
+}
+function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));}
+function escapeAttr(s){return escapeHtml(s);}
+async function copyUser(btn){
+  const u=btn.dataset.user;
+  try{await navigator.clipboard.writeText("@"+u);btn.textContent="Copied";setTimeout(()=>btn.textContent="Copy",900);}
+  catch(e){prompt("Copy username:", "@"+u);}
 }
 
-if (Array.isArray(obj)) {
-
-obj.forEach(scan);
-return;
-
-}
-
-if (typeof obj === "object") {
-
-if (obj.value)
-users.push(normalize(obj.value));
-
-if (obj.title)
-users.push(normalize(obj.title));
-
-Object.values(obj).forEach(scan);
-
-}
-
-}
-
-scan(data);
-
-} catch {
-
-let matches =
-text.match(/@?[a-zA-Z0-9._]{2,30}/g) || [];
-
-users = matches.map(normalize);
-
-}
-
-return [...new Set(users)];
-
-}
-
-async function importData() {
-
-let files =
-document.getElementById("fileInput").files;
-
-if (!files.length) {
-
-alert("Choose your follower/following files first.");
-
-return;
-
-}
-
-for (let file of files) {
-
-let text = await file.text();
-
-let users = extractUsers(text);
-
-let filename =
-file.name.toLowerCase();
-
-if (filename.includes("following")) {
-
-following =
-[...new Set([...following,...users])];
-
-}
-
-else if (filename.includes("followers")) {
-
-followers =
-[...new Set([...followers,...users])];
-
-}
-
-}
-
-save();
-
-render();
-
-alert("Data imported.");
-
-}
-
-function showTab(tab, button) {
-
-currentTab = tab;
-
-document
-.querySelectorAll(".tab")
-.forEach(b => b.classList.remove("active"));
-
-button.classList.add("active");
-
-render();
-
-}
-
-function render() {
-
-document.getElementById("followers").textContent =
-followers.length;
-
-document.getElementById("following").textContent =
-following.length;
-
-let notBack =
-following.filter(x =>
-!followers.includes(x) &&
-!unfollowed.includes(x)
-);
-
-let notFollowing =
-followers.filter(x =>
-!following.includes(x)
-);
-
-document.getElementById("notBack").textContent =
-notBack.length;
-
-document.getElementById("notFollowing").textContent =
-notFollowing.length;
-
-let list = [];
-
-if (currentTab === "notback")
-list = notBack;
-
-if (currentTab === "followers")
-list = followers;
-
-if (currentTab === "following")
-list = following;
-
-let search =
-document.getElementById("search").value
-.toLowerCase();
-
-list =
-list.filter(x =>
-x.toLowerCase().includes(search)
-);
-
-let container =
-document.getElementById("list");
-
-if (!list.length) {
-
-container.innerHTML =
-'<div class="empty">Nothing here yet.</div>';
-
-return;
-
-}
-
-container.innerHTML = "";
-
-list.sort();
-
-list.forEach(username => {
-
-let row =
-document.createElement("div");
-
-row.className = "row";
-
-let avatar =
-document.createElement("div");
-
-avatar.className = "avatar";
-
-avatar.textContent =
-username[0].toUpperCase();
-
-let name =
-document.createElement("div");
-
-name.className = "name";
-
-name.innerHTML =
-`<b>@${username}</b>
-<span>${
-currentTab === "notback"
-? "Doesn't follow you back"
-: currentTab === "followers"
-? "Follows you"
-: "You follow this account"
-}</span>`;
-
-row.appendChild(avatar);
-row.appendChild(name);
-
-if (currentTab === "notback") {
-
-let button =
-document.createElement("button");
-
-button.className = "action";
-
-button.textContent =
-"Mark unfollowed";
-
-button.onclick = () => {
-
-if (!unfollowed.includes(username))
-unfollowed.push(username);
-
-save();
-
-render();
-
-};
-
-row.appendChild(button);
-
-}
-
-container.appendChild(row);
-
+$("zipInput").addEventListener("change",async e=>{
+  const file=e.target.files[0];
+  if(!file)return;
+  $("status").textContent="Reading Instagram export…";
+  try{
+    const data=await parseZip(file);
+    state.followers=new Set(data.followers);
+    state.following=new Set(data.following);
+    $("followersCount").textContent=state.followers.size;
+    $("followingCount").textContent=state.following.size;
+    $("notFollowingBackCount").textContent=[...state.following].filter(x=>!state.followers.has(x)).length;
+    $("dashboard").hidden=false;
+    $("results").hidden=false;
+    $("status").textContent=`Imported ${state.followers.size} followers and ${state.following.size} following.`;
+    render();
+  }catch(err){
+    $("status").textContent="Could not read this export: "+err.message;
+    $("dashboard").hidden=true;
+    $("results").hidden=true;
+  }
 });
 
-}
-
-render();
-
+document.querySelectorAll(".tab").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    document.querySelectorAll(".tab").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    state.tab=btn.dataset.tab;
+    render();
+  });
+});
+$("search").addEventListener("input",render);
 </script>
-
 </body>
 </html>
