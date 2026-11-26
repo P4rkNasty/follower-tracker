@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b0b0f">
+<title>Follower Tracker</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #0b0b0f;
+  color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+               "Segoe UI", sans-serif;
+}
+
+header {
+  padding: 45px 20px 20px;
+}
+
+.small-title {
+  color: #8c8c96;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+h1 {
+  margin: 5px 0 0;
+  font-size: 32px;
+}
+
+main {
+  padding: 0 18px 40px;
+}
+
+.hero {
+  background: #15151b;
+  border: 1px solid #292930;
+  border-radius: 22px;
+  padding: 18px;
+  margin-bottom: 15px;
+}
+
+.hero p {
+  color: #9999a3;
+  font-size: 14px;
+}
+
+button {
+  border: 0;
+  border-radius: 13px;
+  padding: 12px 15px;
+  font-weight: 700;
+}
+
+.primary {
+  background: #fff;
+  color: #111;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.stat {
+  background: #15151b;
+  border: 1px solid #292930;
+  border-radius: 18px;
+  padding: 15px;
+}
+
+.stat span {
+  display: block;
+  color: #92929c;
+  font-size: 12px;
+  margin-bottom: 7px;
+}
+
+.stat b {
+  font-size: 25px;
+}
+
+.red {
+  color: #ff5c72;
+}
+
+.card {
+  background: #111116;
+  border: 1px solid #292930;
+  border-radius: 22px;
+  overflow: hidden;
+  margin-bottom: 15px;
+}
+
+.tabs {
+  display: flex;
+  background: #17171d;
+  padding: 5px;
+  gap: 4px;
+}
+
+.tab {
+  flex: 1;
+  background: transparent;
+  color: #888892;
+}
+
+.tab.active {
+  background: #292930;
+  color: white;
+}
+
+.toolbar {
+  display: flex;
+  gap: 8px;
+  padding: 13px;
+}
+
+input {
+  flex: 1;
+  min-width: 0;
+  background: #19191f;
+  border: 1px solid #303038;
+  border-radius: 13px;
+  padding: 12px;
+  color: white;
+  font-size: 14px;
+  outline: none;
+}
+
+.list {
+  padding: 0 10px 10px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 13px 7px;
+  border-top: 1px solid #24242b;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg,#3b3b45,#1d1d24);
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+}
+
+.name {
+  flex: 1;
+  min-width: 0;
+}
+
+.name b {
+  display: block;
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.name span {
+  display: block;
+  color: #777780;
+  font-size: 11px;
+  margin-top: 3px;
+}
+
+.action {
+  background: #19191f;
+  border: 1px solid #34343d;
+  color: white;
+  font-size: 12px;
+}
+
+.empty {
+  text-align: center;
+  padding: 30px 15px;
+  color: #777780;
+}
+
+.help {
+  padding: 18px;
+}
+
+.help h2 {
+  font-size: 17px;
+}
+
+.help p {
+  color: #9999a3;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+@media (min-width: 700px) {
+  main, header {
+    max-width: 700px;
+    margin: auto;
+  }
+
+  .stats {
+    grid-template-columns: repeat(4,1fr);
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="small-title">FOLLOWER TRACKER</div>
+  <h1>My Followers</h1>
+</header>
+
+<main>
+
+<section class="hero">
+  <p>Private follower tracking on your device.</p>
+
+  <input
+    type="file"
+    id="fileInput"
+    accept=".json,.txt,.html,.htm"
+    multiple
+  >
+
+  <br><br>
+
+  <button class="primary" onclick="importData()">
+    Import follower data
+  </button>
+</section>
+
+<section class="stats">
+
+<div class="stat">
+<span>Followers</span>
+<b id="followers">0</b>
+</div>
+
+<div class="stat">
+<span>Following</span>
+<b id="following">0</b>
+</div>
+
+<div class="stat">
+<span>Don't follow back</span>
+<b id="notBack" class="red">0</b>
+</div>
+
+<div class="stat">
+<span>You don't follow</span>
+<b id="notFollowing">0</b>
+</div>
+
+</section>
+
+<section class="card">
+
+<div class="tabs">
+
+<button class="tab active" onclick="showTab('notback',this)">
+Don't follow back
+</button>
+
+<button class="tab" onclick="showTab('followers',this)">
+Followers
+</button>
+
+<button class="tab" onclick="showTab('following',this)">
+Following
+</button>
+
+</div>
+
+<div class="toolbar">
+
+<input
+id="search"
+type="search"
+placeholder="Search username..."
+oninput="render()"
+>
+
+</div>
+
+<div id="list" class="list"></div>
+
+</section>
+
+<section class="card help">
+
+<h2>How it works</h2>
+
+<p>
+Import your follower and following data from your social account.
+The tracker compares the two lists and shows you who doesn't
+follow you back.
+</p>
+
+<p>
+Your data is stored locally in this browser. No password is needed.
+</p>
+
+</section>
+
+</main>
+
+<script>
+
+let followers =
+JSON.parse(localStorage.getItem("followers") || "[]");
+
+let following =
+JSON.parse(localStorage.getItem("following") || "[]");
+
+let unfollowed =
+JSON.parse(localStorage.getItem("unfollowed") || "[]");
+
+let currentTab = "notback";
+
+function save() {
+
+localStorage.setItem(
+"followers",
+JSON.stringify(followers)
+);
+
+localStorage.setItem(
+"following",
+JSON.stringify(following)
+);
+
+localStorage.setItem(
+"unfollowed",
+JSON.stringify(unfollowed)
+);
+
+}
+
+function normalize(name) {
+
+return String(name)
+.trim()
+.replace(/^@/,"")
+.toLowerCase();
+
+}
+
+function extractUsers(text) {
+
+let users = [];
+
+try {
+
+let data = JSON.parse(text);
+
+function scan(obj) {
+
+if (!obj) return;
+
+if (typeof obj === "string") {
+
+if (
+obj.length >= 2 &&
+obj.length <= 40 &&
+/^[a-zA-Z0-9._]+$/.test(obj)
+) {
+users.push(normalize(obj));
+}
+
+return;
+
+}
+
+if (Array.isArray(obj)) {
+
+obj.forEach(scan);
+return;
+
+}
+
+if (typeof obj === "object") {
+
+if (obj.value)
+users.push(normalize(obj.value));
+
+if (obj.title)
+users.push(normalize(obj.title));
+
+Object.values(obj).forEach(scan);
+
+}
+
+}
+
+scan(data);
+
+} catch {
+
+let matches =
+text.match(/@?[a-zA-Z0-9._]{2,30}/g) || [];
+
+users = matches.map(normalize);
+
+}
+
+return [...new Set(users)];
+
+}
+
+async function importData() {
+
+let files =
+document.getElementById("fileInput").files;
+
+if (!files.length) {
+
+alert("Choose your follower/following files first.");
+
+return;
+
+}
+
+for (let file of files) {
+
+let text = await file.text();
+
+let users = extractUsers(text);
+
+let filename =
+file.name.toLowerCase();
+
+if (filename.includes("following")) {
+
+following =
+[...new Set([...following,...users])];
+
+}
+
+else if (filename.includes("followers")) {
+
+followers =
+[...new Set([...followers,...users])];
+
+}
+
+}
+
+save();
+
+render();
+
+alert("Data imported.");
+
+}
+
+function showTab(tab, button) {
+
+currentTab = tab;
+
+document
+.querySelectorAll(".tab")
+.forEach(b => b.classList.remove("active"));
+
+button.classList.add("active");
+
+render();
+
+}
+
+function render() {
+
+document.getElementById("followers").textContent =
+followers.length;
+
+document.getElementById("following").textContent =
+following.length;
+
+let notBack =
+following.filter(x =>
+!followers.includes(x) &&
+!unfollowed.includes(x)
+);
+
+let notFollowing =
+followers.filter(x =>
+!following.includes(x)
+);
+
+document.getElementById("notBack").textContent =
+notBack.length;
+
+document.getElementById("notFollowing").textContent =
+notFollowing.length;
+
+let list = [];
+
+if (currentTab === "notback")
+list = notBack;
+
+if (currentTab === "followers")
+list = followers;
+
+if (currentTab === "following")
+list = following;
+
+let search =
+document.getElementById("search").value
+.toLowerCase();
+
+list =
+list.filter(x =>
+x.toLowerCase().includes(search)
+);
+
+let container =
+document.getElementById("list");
+
+if (!list.length) {
+
+container.innerHTML =
+'<div class="empty">Nothing here yet.</div>';
+
+return;
+
+}
+
+container.innerHTML = "";
+
+list.sort();
+
+list.forEach(username => {
+
+let row =
+document.createElement("div");
+
+row.className = "row";
+
+let avatar =
+document.createElement("div");
+
+avatar.className = "avatar";
+
+avatar.textContent =
+username[0].toUpperCase();
+
+let name =
+document.createElement("div");
+
+name.className = "name";
+
+name.innerHTML =
+`<b>@${username}</b>
+<span>${
+currentTab === "notback"
+? "Doesn't follow you back"
+: currentTab === "followers"
+? "Follows you"
+: "You follow this account"
+}</span>`;
+
+row.appendChild(avatar);
+row.appendChild(name);
+
+if (currentTab === "notback") {
+
+let button =
+document.createElement("button");
+
+button.className = "action";
+
+button.textContent =
+"Mark unfollowed";
+
+button.onclick = () => {
+
+if (!unfollowed.includes(username))
+unfollowed.push(username);
+
+save();
+
+render();
+
+};
+
+row.appendChild(button);
+
+}
+
+container.appendChild(row);
+
+});
+
+}
+
+render();
+
+</script>
+
+</body>
+</html>
